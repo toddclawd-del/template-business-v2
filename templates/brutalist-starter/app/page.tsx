@@ -742,7 +742,25 @@ function Work(): JSX.Element {
       className="bg-brutal-black py-16 md:py-24 px-4 md:px-8 relative overflow-hidden dark-section" 
       aria-labelledby="work-heading"
     >
-      <TruchetBackground />
+      {/* Decorative background shapes */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+        className="absolute top-[10%] -left-[100px] w-[300px] h-[300px] border-[4px] border-brutal-yellow opacity-20"
+        aria-hidden="true"
+      />
+      <motion.div
+        animate={{ rotate: -360 }}
+        transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+        className="absolute bottom-[20%] -right-[80px] w-[250px] h-[250px] border-[4px] border-brutal-pink rounded-full opacity-20"
+        aria-hidden="true"
+      />
+      <motion.div
+        animate={{ rotate: 180 }}
+        transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+        className="absolute top-[60%] left-[10%] w-[150px] h-[150px] border-[4px] border-brutal-blue opacity-15"
+        aria-hidden="true"
+      />
       
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section header */}
