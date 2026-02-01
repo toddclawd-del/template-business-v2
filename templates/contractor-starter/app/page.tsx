@@ -1,164 +1,19 @@
 'use client'
 
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
-import { Home as HomeIcon, Hammer, Wrench, Paintbrush, Check, Facebook, Instagram } from 'lucide-react'
+import Link from 'next/link'
+import { Check } from 'lucide-react'
+import { Nav } from '@/components/layout/Nav'
+import { Footer } from '@/components/layout/Footer'
+import { COMPANY, SERVICES, PROJECTS, TESTIMONIALS, SERVICE_AREAS, GENERAL_FAQ as FAQ } from '@/lib/data'
 
 // ═══════════════════════════════════════════════════════════════
 // CONTRACTOR STARTER TEMPLATE
 // Professional, trust-building site for contractors & tradespeople
 // Designed for credibility and lead conversion
 // ═══════════════════════════════════════════════════════════════
-
-// TypeScript interfaces
-interface Service {
-  icon: React.ReactNode
-  name: string
-  description: string
-  features: string[]
-}
-
-interface Project {
-  title: string
-  category: string
-  description: string
-  image: string
-}
-
-interface Testimonial {
-  quote: string
-  author: string
-  location: string
-  rating: number
-  project: string
-}
-
-interface FAQItem {
-  q: string
-  a: string
-}
-
-interface AnimationVariant {
-  initial: { opacity: number; y?: number; scale?: number }
-  animate: { opacity: number; y?: number; scale?: number }
-  transition: { duration: number; ease?: number[]; delay?: number }
-}
-
-const COMPANY = {
-  name: "BuildRight Construction",
-  tagline: "Quality Craftsmanship, Honest Service",
-  phone: "(555) 987-6543",
-  email: "info@buildright.com",
-  license: "License #ABC123456",
-  insurance: "Fully Insured & Bonded",
-  yearsInBusiness: 15,
-  projectsCompleted: 500,
-  heroImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&h=1080&fit=crop&q=90",
-}
-
-const SERVICES: Service[] = [
-  {
-    icon: <HomeIcon className="w-7 h-7 text-primary-600" />,
-    name: 'Home Remodeling',
-    description: 'Complete home renovations from concept to completion. We transform your vision into reality with expert craftsmanship.',
-    features: ['Kitchen Remodels', 'Bathroom Renovations', 'Basement Finishing', 'Room Additions'],
-  },
-  {
-    icon: <Hammer className="w-7 h-7 text-primary-600" />,
-    name: 'New Construction',
-    description: 'Custom home building and commercial construction. Quality materials and expert craftsmanship on every project.',
-    features: ['Custom Homes', 'Garages & Workshops', 'Commercial Buildings', 'Accessory Dwelling Units'],
-  },
-  {
-    icon: <Wrench className="w-7 h-7 text-primary-600" />,
-    name: 'Repairs & Maintenance',
-    description: 'From minor repairs to major fixes, we handle it all with fast response times and reliable service.',
-    features: ['Drywall Repair', 'Deck & Fence Repair', 'Door & Window Installation', 'General Handyman'],
-  },
-  {
-    icon: <Paintbrush className="w-7 h-7 text-primary-600" />,
-    name: 'Exterior Work',
-    description: 'Boost your curb appeal and protect your investment with quality exterior improvements.',
-    features: ['Siding Installation', 'Roofing', 'Deck Building', 'Outdoor Living Spaces'],
-  },
-]
-
-const PROJECTS: Project[] = [
-  { 
-    title: 'Modern Kitchen Remodel', 
-    category: 'Kitchen',
-    description: 'Complete kitchen transformation with custom cabinetry',
-    image: 'https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=800&h=600&fit=crop&q=85'
-  },
-  { 
-    title: 'Master Bathroom Renovation', 
-    category: 'Bathroom',
-    description: 'Luxury spa-inspired bathroom redesign',
-    image: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?w=800&h=600&fit=crop&q=85'
-  },
-  { 
-    title: 'Backyard Deck Build', 
-    category: 'Outdoor',
-    description: 'Custom composite deck with built-in seating',
-    image: 'https://images.unsplash.com/photo-1591825729269-caeb344f6df2?w=800&h=600&fit=crop&q=85'
-  },
-  { 
-    title: 'Basement Finishing', 
-    category: 'Basement',
-    description: 'Full basement conversion with home theater',
-    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop&q=85'
-  },
-]
-
-const TESTIMONIALS: Testimonial[] = [
-  { 
-    quote: "BuildRight completely transformed our kitchen. Professional from start to finish, and they finished ahead of schedule!", 
-    author: "Jennifer M.", 
-    location: "Denver, CO", 
-    rating: 5,
-    project: "Kitchen Remodel"
-  },
-  { 
-    quote: "Honest, reliable, and skilled. They fixed issues that other contractors missed. Highly recommend!", 
-    author: "Michael S.", 
-    location: "Aurora, CO", 
-    rating: 5,
-    project: "Home Repair"
-  },
-  { 
-    quote: "Our deck is beautiful and built to last. Fair price, great communication, quality work.", 
-    author: "David & Lisa T.", 
-    location: "Lakewood, CO", 
-    rating: 5,
-    project: "Deck Build"
-  },
-]
-
-const SERVICE_AREAS = ["Denver", "Aurora", "Lakewood", "Littleton", "Centennial", "Englewood", "Golden", "Arvada", "Westminster", "Thornton"]
-
-const FAQ: FAQItem[] = [
-  { 
-    q: "Are you licensed and insured?", 
-    a: "Yes! We are fully licensed (License #ABC123456) and carry comprehensive liability insurance and workers' compensation coverage. We're happy to provide documentation upon request." 
-  },
-  { 
-    q: "Do you offer free estimates?", 
-    a: "Absolutely. We provide free, no-obligation estimates for all projects. We'll visit your property, discuss your needs, and provide a detailed written quote within 48 hours." 
-  },
-  { 
-    q: "What is your typical timeline?", 
-    a: "Timelines vary by project scope. A bathroom remodel typically takes 2-3 weeks, while a kitchen remodel may take 4-6 weeks. We'll provide a detailed timeline in your estimate." 
-  },
-  { 
-    q: "Do you pull permits?", 
-    a: "Yes, we handle all necessary permits and inspections. This ensures your project meets local building codes and protects your investment." 
-  },
-  { 
-    q: "What warranty do you offer?", 
-    a: "We stand behind our work with a 2-year workmanship warranty. Many of the materials we use also come with manufacturer warranties extending up to 25 years." 
-  },
-]
 
 // Animation variants
 const fadeInUp = {
@@ -185,111 +40,6 @@ const scaleIn = {
 // ═══════════════════════════════════════════════════════════════
 // COMPONENTS
 // ═══════════════════════════════════════════════════════════════
-
-function Nav() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-  
-  return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-white/95 backdrop-blur-lg shadow-md dark:bg-dark-900/95' 
-        : 'bg-white shadow-sm dark:bg-dark-900'
-    }`}>
-      <nav aria-label="Main navigation" className="max-w-6xl mx-auto px-6">
-        <div className="flex items-center justify-between h-20">
-          <a href="/" className="font-display text-xl text-dark-900 flex items-center gap-2">
-            <span className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white text-lg font-bold">
-              B
-            </span>
-            <span className="hidden sm:inline">{COMPANY.name}</span>
-          </a>
-          
-          <div className="hidden lg:flex items-center gap-8">
-            {['Services', 'Work', 'About', 'FAQ'].map((item) => (
-              <a 
-                key={item}
-                href={`#${item.toLowerCase()}`} 
-                className="nav-link"
-              >
-                {item === 'Work' ? 'Our Work' : item}
-              </a>
-            ))}
-          </div>
-          
-          <div className="hidden lg:flex items-center gap-4">
-            <a href={`tel:${COMPANY.phone}`} className="flex items-center gap-2 font-semibold text-primary-600 hover:text-primary-700 transition-colors">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              {COMPANY.phone}
-            </a>
-            <a href="#quote" className="btn-primary text-sm">Get Free Quote</a>
-          </div>
-          
-          <button 
-            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
-        
-        {/* Mobile menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div 
-              id="mobile-menu"
-              role="navigation"
-              aria-label="Mobile navigation"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden overflow-hidden border-t border-gray-100"
-            >
-              <div className="py-6 space-y-4">
-                {['Services', 'Our Work', 'About', 'FAQ'].map((item) => (
-                  <a 
-                    key={item}
-                    href={`#${item.toLowerCase().replace(' ', '-')}`} 
-                    className="block text-gray-600 hover:text-primary-600 font-medium transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item}
-                  </a>
-                ))}
-                <div className="pt-4 border-t border-gray-100 space-y-3">
-                  <a href={`tel:${COMPANY.phone}`} className="flex items-center gap-2 font-semibold text-primary-600">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    {COMPANY.phone}
-                  </a>
-                  <a href="#quote" className="btn-primary text-center block">Get Free Quote</a>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-    </header>
-  )
-}
 
 function Hero() {
   const { scrollY } = useScroll()
@@ -345,12 +95,12 @@ function Hero() {
           
           {/* CTAs */}
           <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4">
-            <a href="#quote" className="btn-accent text-lg group">
+            <Link href="/contact" className="btn-accent text-lg group">
               Get Your Free Estimate
               <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-            </a>
+            </Link>
             <a href={`tel:${COMPANY.phone}`} className="btn-secondary bg-white text-lg group">
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -390,8 +140,11 @@ function Hero() {
 }
 
 function Services() {
+  // Show first 4 services on home page
+  const featuredServices = SERVICES.slice(0, 4)
+  
   return (
-    <section id="services" className="section-padding bg-[rgb(var(--muted))]">
+    <section className="section-padding bg-[rgb(var(--muted))]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div 
           className="text-center mb-16"
@@ -413,31 +166,55 @@ function Services() {
           viewport={{ once: true }}
           variants={staggerContainer}
         >
-          {SERVICES.map((service, i) => (
+          {featuredServices.map((service, i) => (
             <motion.div 
               key={i}
               variants={fadeInUp}
-              className="service-card group"
             >
-              <div className="service-card-icon">
-                {service.icon}
-              </div>
-              <h3 className="service-card-title">{service.name}</h3>
-              <p className="service-card-description">{service.description}</p>
-              <ul className="service-card-features">
-                {service.features.map((f, j) => (
-                  <li key={j} className="service-card-feature">
-                    <span className="service-card-feature-check">
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </span>
-                    <span className="text-gray-600">{f}</span>
-                  </li>
-                ))}
-              </ul>
+              <Link 
+                href={`/services/${service.slug}`}
+                className="service-card group block h-full"
+              >
+                <div className="service-card-icon">
+                  <span className="text-2xl">{service.icon}</span>
+                </div>
+                <h3 className="service-card-title">{service.name}</h3>
+                <p className="service-card-description">{service.shortDescription}</p>
+                <ul className="service-card-features">
+                  {service.features.slice(0, 4).map((f, j) => (
+                    <li key={j} className="service-card-feature">
+                      <span className="service-card-feature-check">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                      <span className="text-gray-600">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <span className="inline-flex items-center gap-2 text-primary-600 font-semibold text-sm mt-4 group-hover:gap-3 transition-all">
+                  Learn More
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+              </Link>
             </motion.div>
           ))}
+        </motion.div>
+        
+        <motion.div 
+          className="text-center mt-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          <Link href="/services" className="btn-secondary group">
+            View All Services
+            <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
         </motion.div>
       </div>
     </section>
@@ -445,8 +222,11 @@ function Services() {
 }
 
 function Portfolio() {
+  // Show first 4 projects on home page
+  const featuredProjects = PROJECTS.slice(0, 4)
+  
   return (
-    <section id="work" className="section-padding bg-[rgb(var(--background))]">
+    <section className="section-padding bg-[rgb(var(--background))]">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div 
           className="text-center mb-16"
@@ -468,40 +248,48 @@ function Portfolio() {
           viewport={{ once: true }}
           variants={staggerContainer}
         >
-          {PROJECTS.map((project, i) => (
-            <motion.div key={i} variants={scaleIn} className="project-card group">
-              <div className="project-card-image relative">
-                <Image 
-                  src={project.image}
-                  alt={`${project.title} - ${project.description}`}
-                  fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <span className="project-card-badge">
-                  {project.category}
-                </span>
-              </div>
-              <div className="project-card-content">
-                <h3 className="project-card-title">{project.title}</h3>
-                <p className="text-[rgb(var(--muted-foreground))] text-sm mt-1">{project.description}</p>
-              </div>
+          {featuredProjects.map((project, i) => (
+            <motion.div key={i} variants={scaleIn}>
+              <Link href={`/projects/${project.slug}`} className="project-card group block">
+                <div className="project-card-image relative">
+                  <Image 
+                    src={project.image}
+                    alt={`${project.title} - ${project.description}`}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <span className="project-card-badge">
+                    {project.category}
+                  </span>
+                </div>
+                <div className="project-card-content">
+                  <h3 className="project-card-title">{project.title}</h3>
+                  <p className="text-[rgb(var(--muted-foreground))] text-sm mt-1">{project.description}</p>
+                </div>
+              </Link>
             </motion.div>
           ))}
         </motion.div>
         
         <motion.div 
-          className="text-center mt-14"
+          className="text-center mt-14 flex flex-col sm:flex-row gap-4 justify-center"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <a href="#quote" className="btn-primary group">
+          <Link href="/projects" className="btn-secondary group">
+            View All Projects
+            <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+          <Link href="/contact" className="btn-primary group">
             Get a Quote for Your Project
             <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>
@@ -585,113 +373,44 @@ function TestimonialsSection() {
   )
 }
 
-function QuoteForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  
+function QuoteSection() {
   return (
-    <section id="quote" className="section-padding bg-[rgb(var(--muted))]">
+    <section className="section-padding bg-[rgb(var(--muted))]">
       <div className="max-w-4xl mx-auto px-6">
         <motion.div 
-          className="quote-form-wrapper p-8 md:p-12"
+          className="quote-form-wrapper p-8 md:p-12 text-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <div className="text-center mb-10">
-            <span className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-100 mb-4">
-              <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <span className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-100 mb-4">
+            <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </span>
+          <h2 className="section-title">Get Your Free Estimate</h2>
+          <p className="text-[rgb(var(--muted-foreground))] text-lg mb-8 max-w-xl mx-auto">
+            Tell us about your project and we'll get back to you within 24 hours with a detailed, no-obligation quote.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/contact" className="btn-primary text-lg group">
+              Request Free Estimate
+              <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-            </span>
-            <h2 className="section-title">Get Your Free Estimate</h2>
-            <p className="text-[rgb(var(--muted-foreground))] text-lg">
-              Tell us about your project and we'll get back to you within 24 hours.
-            </p>
+            </Link>
+            <a href={`tel:${COMPANY.phone}`} className="btn-secondary text-lg group">
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              Call {COMPANY.phone}
+            </a>
           </div>
           
-          <form className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="form-group">
-                <label htmlFor="quote-name" className="form-label">Name *</label>
-                <input type="text" id="quote-name" name="name" required className="form-input" placeholder="John Smith" autoComplete="name" />
-              </div>
-              <div className="form-group">
-                <label htmlFor="quote-phone" className="form-label">Phone *</label>
-                <input type="tel" id="quote-phone" name="phone" required className="form-input" placeholder="(555) 123-4567" autoComplete="tel" />
-              </div>
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="quote-email" className="form-label">Email *</label>
-              <input type="email" id="quote-email" name="email" required className="form-input" placeholder="john@example.com" autoComplete="email" />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="quote-project-type" className="form-label">Type of Project *</label>
-              <select id="quote-project-type" name="projectType" required className="form-select">
-                <option value="">Select a service...</option>
-                <option value="kitchen">Kitchen Remodel</option>
-                <option value="bathroom">Bathroom Remodel</option>
-                <option value="basement">Basement Finishing</option>
-                <option value="addition">Room Addition</option>
-                <option value="outdoor">Deck/Outdoor</option>
-                <option value="repairs">Repairs/Maintenance</option>
-                <option value="construction">New Construction</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="quote-description" className="form-label">Project Description *</label>
-              <textarea 
-                id="quote-description"
-                name="description"
-                rows={4} 
-                required 
-                className="form-textarea" 
-                placeholder="Tell us about your project, including any specific requirements or timeline..."
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="quote-address" className="form-label">Address (for on-site estimate)</label>
-              <input 
-                type="text" 
-                id="quote-address"
-                name="address"
-                className="form-input" 
-                placeholder="123 Main St, Denver, CO 80202"
-                autoComplete="street-address"
-              />
-            </div>
-            
-            <button 
-              type="submit" 
-              className="btn-primary w-full text-lg group"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Submitting...
-                </span>
-              ) : (
-                <>
-                  Request Free Estimate
-                  <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </>
-              )}
-            </button>
-            
-            <p className="text-center text-sm text-[rgb(var(--muted-foreground))]">
-              🔒 We respect your privacy. Your information will never be shared.
-            </p>
-          </form>
+          <p className="text-center text-sm text-[rgb(var(--muted-foreground))] mt-6">
+            🔒 We respect your privacy. Your information will never be shared.
+          </p>
         </motion.div>
       </div>
     </section>
@@ -763,7 +482,7 @@ function FAQSection() {
 
 function ServiceArea() {
   return (
-    <section id="about" className="section-padding bg-[rgb(var(--muted))]">
+    <section className="section-padding bg-[rgb(var(--muted))]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -787,7 +506,7 @@ function ServiceArea() {
             </div>
             
             {/* Credentials */}
-            <div className="space-y-3">
+            <div className="space-y-3 mb-8">
               {[
                 COMPANY.license,
                 COMPANY.insurance,
@@ -802,6 +521,13 @@ function ServiceArea() {
                 </div>
               ))}
             </div>
+            
+            <Link href="/about" className="btn-secondary group">
+              Learn More About Us
+              <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </motion.div>
           
           <motion.div
@@ -848,106 +574,6 @@ function ServiceArea() {
   )
 }
 
-function Footer() {
-  const currentYear = new Date().getFullYear()
-  
-  return (
-    <footer className="bg-dark-900 text-white">
-      {/* CTA strip */}
-      <div className="bg-primary-600 py-8">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div>
-              <h3 className="text-xl font-bold text-white">Ready to start your project?</h3>
-              <p className="text-primary-100">Get a free estimate today.</p>
-            </div>
-            <a href="#quote" className="btn-accent">
-              Get Free Estimate
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      {/* Main footer */}
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white text-lg font-bold">
-                B
-              </span>
-              <span className="font-display text-xl">{COMPANY.name}</span>
-            </div>
-            <p className="text-gray-400 text-sm mb-4 max-w-sm">{COMPANY.tagline}</p>
-            <div className="text-sm text-gray-500 space-y-1 mb-6">
-              <p>{COMPANY.license}</p>
-              <p>{COMPANY.insurance}</p>
-            </div>
-            {/* Social Links */}
-            <div className="flex items-center gap-4">
-              <a 
-                href="#" 
-                aria-label="Follow us on Facebook"
-                className="w-10 h-10 rounded-full bg-gray-800 hover:bg-primary-600 flex items-center justify-center transition-colors"
-              >
-                <Facebook className="w-5 h-5 text-gray-400 hover:text-white" />
-              </a>
-              <a 
-                href="#" 
-                aria-label="Follow us on Instagram"
-                className="w-10 h-10 rounded-full bg-gray-800 hover:bg-primary-600 flex items-center justify-center transition-colors"
-              >
-                <Instagram className="w-5 h-5 text-gray-400 hover:text-white" />
-              </a>
-            </div>
-          </div>
-          
-          <div>
-            <h4 className="font-bold mb-4">Contact</h4>
-            <address className="space-y-3 text-gray-400 text-sm not-italic">
-              <a href={`tel:${COMPANY.phone}`} className="flex items-center gap-2 hover:text-white transition-colors">
-                <svg className="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                <span>{COMPANY.phone}</span>
-              </a>
-              <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2 hover:text-white transition-colors">
-                <svg className="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <span>{COMPANY.email}</span>
-              </a>
-            </address>
-          </div>
-          
-          <div>
-            <h4 className="font-bold mb-4">Hours</h4>
-            <div className="text-gray-400 text-sm space-y-1">
-              <p>Monday - Friday: 7am - 6pm</p>
-              <p>Saturday: 8am - 4pm</p>
-              <p>Sunday: Closed</p>
-              <p className="mt-3 text-primary-400 font-medium">24/7 Emergency Service</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-400 text-sm">
-            © {currentYear} {COMPANY.name}. All rights reserved.
-          </p>
-          <nav aria-label="Legal" className="flex items-center gap-6 text-sm">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-900 rounded">Privacy Policy</a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-900 rounded">Terms of Service</a>
-          </nav>
-        </div>
-      </div>
-    </footer>
-  )
-}
-
 // ═══════════════════════════════════════════════════════════════
 // MAIN PAGE
 // ═══════════════════════════════════════════════════════════════
@@ -968,7 +594,7 @@ export default function Home() {
         <Services />
         <Portfolio />
         <TestimonialsSection />
-        <QuoteForm />
+        <QuoteSection />
         <FAQSection />
         <ServiceArea />
       </main>
