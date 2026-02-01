@@ -51,6 +51,12 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'payment',
+      title: 'Payment Integration',
+      type: 'paymentIntegration',
+      description: 'Configure Stripe Pricing Table for subscriptions or checkout links',
+    }),
+    defineField({
       name: 'footer',
       title: 'Footer',
       type: 'object',

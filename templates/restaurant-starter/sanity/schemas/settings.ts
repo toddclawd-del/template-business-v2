@@ -65,14 +65,16 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'reservationUrl',
-      title: 'Reservation URL (OpenTable, Resy, etc.)',
-      type: 'url',
+      name: 'booking',
+      title: 'Reservation Integration',
+      type: 'bookingIntegration',
+      description: 'Configure table reservations (OpenTable, Resy, Yelp, etc.)',
     }),
     defineField({
-      name: 'orderUrl',
-      title: 'Online Ordering URL',
-      type: 'url',
+      name: 'ordering',
+      title: 'Online Ordering',
+      type: 'paymentIntegration',
+      description: 'Configure online ordering/takeout (Toast, Square, DoorDash Storefront, etc.)',
     }),
     defineField({
       name: 'socialLinks',

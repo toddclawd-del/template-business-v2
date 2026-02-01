@@ -75,6 +75,18 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'booking',
+      title: 'Booking Integration',
+      type: 'bookingIntegration',
+      description: 'Configure discovery call & session booking (Calendly, Cal.com, etc.)',
+    }),
+    defineField({
+      name: 'payment',
+      title: 'Payment Integration',
+      type: 'paymentIntegration',
+      description: 'Configure payment processing for programs and packages (Stripe, etc.)',
+    }),
+    defineField({
       name: 'social',
       title: 'Social Links',
       type: 'object',

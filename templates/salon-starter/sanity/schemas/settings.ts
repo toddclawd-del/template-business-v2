@@ -54,25 +54,16 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'bookingUrl',
-      title: 'Booking URL (Fresha, Vagaro, Booksy, etc.)',
-      type: 'url',
-      validation: (Rule) => Rule.required(),
+      name: 'booking',
+      title: 'Booking Integration',
+      type: 'bookingIntegration',
+      description: 'Configure your appointment booking system (Fresha, Vagaro, Booksy, etc.)',
     }),
     defineField({
-      name: 'bookingPlatform',
-      title: 'Booking Platform',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Fresha', value: 'fresha' },
-          { title: 'Vagaro', value: 'vagaro' },
-          { title: 'Booksy', value: 'booksy' },
-          { title: 'GlossGenius', value: 'glossgenius' },
-          { title: 'Square Appointments', value: 'square' },
-          { title: 'Other', value: 'other' },
-        ],
-      },
+      name: 'payment',
+      title: 'Payment Integration',
+      type: 'paymentIntegration',
+      description: 'Configure payment processing for gift cards, deposits, or online purchases',
     }),
     defineField({
       name: 'socialLinks',

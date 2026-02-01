@@ -4,6 +4,9 @@ import service from './service'
 import teamMember from './teamMember'
 import galleryImage from './galleryImage'
 import testimonial from './testimonial'
+// Integration schemas for booking/payment
+import bookingIntegration from './bookingIntegration'
+import paymentIntegration from './paymentIntegration'
 
 export const schemaTypes = [
   settings,
@@ -12,4 +15,7 @@ export const schemaTypes = [
   teamMember,
   galleryImage,
   testimonial,
+  // Object types (must be registered for use in documents)
+  bookingIntegration,
+  paymentIntegration,
 ]

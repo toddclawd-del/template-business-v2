@@ -4,18 +4,16 @@ A premium landing page template for SaaS products, startups, and web apps. Built
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYOUR_USERNAME%2Fsaas-starter-template&env=NEXT_PUBLIC_SANITY_PROJECT_ID,NEXT_PUBLIC_SANITY_DATASET&envDescription=Sanity%20CMS%20credentials&envLink=https%3A%2F%2Fwww.sanity.io%2Fmanage)
 
-![Template Preview](preview.png)
-
 ---
 
 ## ✨ Features
 
 - **Modern Design** — Clean, professional aesthetic inspired by top SaaS companies
 - **Sanity CMS** — Edit all content visually, no code required
+- **Stripe Pricing Table** — Built-in subscription payment support
 - **One-Click Deploy** — Live on Vercel in under 5 minutes
 - **Fully Responsive** — Looks perfect on all devices
 - **Animated** — Smooth Framer Motion animations throughout
-- **Shader Background** — Optional WebGL gradient effect
 - **SEO Optimized** — Meta tags, Open Graph, sitemap ready
 - **Fast** — 95+ Lighthouse score out of the box
 
@@ -51,6 +49,66 @@ npm run dev
 
 ---
 
+## 🔗 Payment Integration (Stripe)
+
+### Setting Up Stripe Pricing Table
+
+The easiest way to add subscription billing to your SaaS:
+
+**Step 1: Create Products in Stripe**
+1. Go to [Stripe Dashboard](https://dashboard.stripe.com) → Product Catalog
+2. Click **Add Product**
+3. Create your tiers (e.g., Starter $29/mo, Pro $79/mo, Enterprise $199/mo)
+4. Set up recurring prices for subscriptions
+
+**Step 2: Create a Pricing Table**
+1. In Stripe Dashboard → Product Catalog → **Pricing Tables**
+2. Click **Create pricing table**
+3. Add your products/prices
+4. Customize the appearance (colors, layout)
+5. Click **Continue to get code snippet**
+6. Copy the **Pricing Table ID** (`prctbl_xxx`)
+
+**Step 3: Configure in Sanity**
+1. Go to Sanity Studio → **Site Settings** → **Payment Integration**
+2. Select provider: `Stripe Pricing Table`
+3. Enter your **Pricing Table ID** (`prctbl_xxx`)
+4. Enter your **Publishable Key** (`pk_live_xxx` or `pk_test_xxx`)
+   - Find this in Stripe Dashboard → Developers → API Keys
+5. Save!
+
+**Step 4: Done!**
+The Stripe Pricing Table automatically renders on your pricing page with:
+- Your configured tiers and pricing
+- Checkout flow handled by Stripe
+- Subscription management built-in
+
+### Alternative: Checkout Links
+
+If you prefer simpler checkout links instead of the pricing table:
+
+1. In Sanity, select provider: `Stripe Checkout Link`
+2. Create Payment Links in Stripe Dashboard → Payment Links
+3. Copy the URL (e.g., `https://buy.stripe.com/xxx`)
+4. Paste in the **Checkout URL** field
+
+### Using Payment Components
+
+```tsx
+import { PaymentEmbed, StripePricingTable } from '@/components/PaymentEmbed'
+
+// Renders Stripe Pricing Table from Sanity config:
+<PaymentEmbed config={settings.payment} />
+
+// Or render directly with props:
+<StripePricingTable 
+  pricingTableId="prctbl_xxx"
+  publishableKey="pk_live_xxx"
+/>
+```
+
+---
+
 ## 📝 Editing Content
 
 All content is managed through Sanity Studio. No coding required!
@@ -69,15 +127,10 @@ All content is managed through Sanity Studio. No coding required!
 | **Features** | Feature title, description, icon for each feature |
 | **How It Works** | Step title, description, number |
 | **Pricing** | Plan names, prices, features, popular badge |
+| **Payment** | Stripe Pricing Table ID, Publishable Key |
 | **Testimonials** | Quote, author name, company, avatar |
 | **FAQ** | Questions and answers |
 | **Footer** | Links, social icons, copyright text |
-
-### Adding Images
-
-1. Click any image field in Sanity Studio
-2. Drag & drop your image or click to browse
-3. Images are automatically optimized for web
 
 ---
 
@@ -146,15 +199,12 @@ Propagation takes 5-30 minutes.
 │   ├── Hero.tsx        # Hero section
 │   ├── Features.tsx    # Features grid
 │   ├── Pricing.tsx     # Pricing table
-│   ├── Testimonials.tsx
-│   ├── FAQ.tsx
+│   ├── PaymentEmbed.tsx # Stripe payment widget
 │   └── Footer.tsx
 ├── sanity/
 │   ├── client.ts       # Sanity client config
 │   ├── queries.ts      # GROQ queries
 │   └── schemas/        # Content schemas
-├── lib/
-│   └── utils.ts        # Utility functions
 └── public/
     └── images/         # Static images
 ```
@@ -175,14 +225,14 @@ Propagation takes 5-30 minutes.
 ### Do I need to know how to code?
 No! All content editing is done through Sanity's visual editor.
 
-### How do I add new sections?
-You'll need basic React knowledge to add entirely new sections. Each section is a component in the `/components` folder.
+### How do I set up Stripe?
+See the **Payment Integration** section above. You'll need a Stripe account (free to create), then create a Pricing Table in the Stripe Dashboard.
 
-### Can I remove sections?
-Yes, just remove the component from `app/page.tsx`.
+### Can I use a different payment provider?
+Yes! The template also supports Stripe Checkout Links, PayPal, Gumroad, LemonSqueezy, and custom checkout URLs.
 
 ### How much does hosting cost?
-Free! Vercel's free tier handles most sites easily.
+Free! Vercel's free tier handles most sites easily. Stripe charges transaction fees when you make sales.
 
 ### Can I use this for client projects?
 Yes, the commercial license is included with your purchase.
@@ -194,20 +244,6 @@ Yes, the commercial license is included with your purchase.
 - **Video Tutorial:** [Watch Setup Guide](https://youtube.com/...)
 - **Email:** support@[yourdomain].com
 - **Response Time:** Within 24 hours
-
----
-
-## 📄 License
-
-This template is licensed for personal and commercial use. You may:
-- ✅ Use for yourself or clients
-- ✅ Modify and customize
-- ✅ Create multiple sites
-
-You may not:
-- ❌ Resell the template as-is
-- ❌ Include in template bundles
-- ❌ Share your download with others
 
 ---
 
