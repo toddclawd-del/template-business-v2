@@ -2,19 +2,30 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { PRODUCT } from '../lib/data'
-
-const NAV_LINKS = ['Features', 'Pricing', 'Testimonials', 'FAQ']
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { PRODUCT, NAV_LINKS, MOBILE_EXTRA_LINKS } from '../lib/data'
 
 export default function Nav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
   
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+  
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
+  
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/'
+    return pathname.startsWith(href)
+  }
   
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -24,16 +35,22 @@ export default function Nav() {
     }`}>
       <div className="container-default">
         <div className="flex items-center justify-between h-16">
-          <a href="/" className="logo">
+          <Link href="/" className="logo">
             <div className="logo-icon">
               <span className="text-white font-bold text-lg">L</span>
             </div>
             <span className="logo-text">{PRODUCT.name}</span>
-          </a>
+          </Link>
           
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="nav-link">{item}</a>
+              <Link 
+                key={item.href} 
+                href={item.href} 
+                className={`nav-link ${isActive(item.href) ? 'text-primary-600 dark:text-primary-400' : ''}`}
+              >
+                {item.label}
+              </Link>
             ))}
           </div>
           
@@ -65,18 +82,38 @@ export default function Nav() {
               exit={{ opacity: 0, height: 0 }}
               className="md:hidden overflow-hidden bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-800"
             >
-              <div className="py-6 space-y-4">
+              <div className="py-6 space-y-1">
                 {NAV_LINKS.map((item) => (
-                  <a 
-                    key={item}
-                    href={`#${item.toLowerCase()}`} 
-                    className="block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
+                  <Link 
+                    key={item.href}
+                    href={item.href} 
+                    className={`block px-4 py-3 rounded-lg font-medium transition-colors
+                      ${isActive(item.href) 
+                        ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30' 
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                      }`}
                   >
-                    {item}
-                  </a>
+                    {item.label}
+                  </Link>
                 ))}
-                <div className="pt-4 border-t border-gray-100 dark:border-slate-800 space-y-3">
+                
+                <div className="border-t border-gray-100 dark:border-slate-800 my-4" />
+                
+                {MOBILE_EXTRA_LINKS.map((item) => (
+                  <Link 
+                    key={item.href}
+                    href={item.href} 
+                    className={`block px-4 py-3 rounded-lg font-medium transition-colors
+                      ${isActive(item.href) 
+                        ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30' 
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                      }`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                
+                <div className="pt-4 border-t border-gray-100 dark:border-slate-800 space-y-3 px-4">
                   <button className="btn-secondary w-full">Sign In</button>
                   <button className="btn-primary w-full">Get Started</button>
                 </div>
