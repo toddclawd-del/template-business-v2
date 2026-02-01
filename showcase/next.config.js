@@ -6,6 +6,7 @@ const nextConfig = {
   // Base path for GitHub Pages (repo name)
   // Change this if deploying to custom domain
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || '',
   
   images: {
     // Use unoptimized images for static export
