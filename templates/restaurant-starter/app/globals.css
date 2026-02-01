@@ -346,6 +346,8 @@ html.lenis, html.lenis body {
     @apply inline-flex items-center gap-2 px-6 py-3 text-sm font-medium
            rounded-full border border-transparent
            transition-all duration-300 ease-out;
+    /* Ensure visible even if GSAP doesn't fire */
+    opacity: 1 !important;
   }
   
   .category-tab-inactive {

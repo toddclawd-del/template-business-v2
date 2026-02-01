@@ -368,17 +368,21 @@ function Menu() {
         },
       })
       
-      gsap.from('.category-tab', {
-        y: 20,
-        opacity: 0,
-        stagger: 0.08,
-        duration: 0.6,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: '.category-tabs',
-          start: 'top 80%',
-        },
-      })
+      gsap.fromTo('.category-tab', 
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.08,
+          duration: 0.6,
+          ease: 'power2.out',
+          clearProps: 'all',
+          scrollTrigger: {
+            trigger: '.category-tabs',
+            start: 'top 80%',
+          },
+        }
+      )
     }, menuRef)
     
     return () => ctx.revert()
