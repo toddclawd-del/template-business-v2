@@ -8,12 +8,18 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ["var(--font-serif)", "Cormorant Garamond", "serif"],
+        sans: ["var(--font-sans)", "Inter", "sans-serif"],
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        neutral: {
+          950: "#0a0a0a",
+        },
       },
     },
   },
   plugins: [],
 };
+
 export default config;

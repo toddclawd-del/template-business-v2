@@ -1,6 +1,7 @@
 {
   "name": "photographer-starter",
   "version": "0.1.0",
+  "description": "A premium, visual-first portfolio template for photographers and creative professionals. Features elegant dark design, smooth Framer Motion animations, lightbox gallery, portfolio filtering, and responsive layouts.",
   "private": true,
   "scripts": {
     "dev": "next dev",
