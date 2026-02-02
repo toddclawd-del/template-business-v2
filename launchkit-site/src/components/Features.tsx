@@ -9,11 +9,18 @@ import {
   Zap, 
   Moon, 
   Smartphone, 
-  FileText,
-  Sparkles
+  Sparkles,
+  Database
 } from 'lucide-react';
 
 const features = [
+  {
+    icon: Database,
+    title: 'Sanity CMS Integrated',
+    description: 'Every template comes with Sanity CMS wired up. Edit content without touching code — perfect for clients.',
+    gradient: 'from-orange-500 to-amber-500',
+    badge: 'KEY FEATURE',
+  },
   {
     icon: Layers,
     title: 'Multi-Page, Not Just Landing',
@@ -23,7 +30,7 @@ const features = [
   {
     icon: Code2,
     title: 'Production-Ready Code',
-    description: 'Clean TypeScript, proper architecture, ready for your CMS. No spaghetti code or hacky solutions.',
+    description: 'Clean TypeScript, proper architecture, scalable patterns. No spaghetti code or hacky solutions.',
     gradient: 'from-blue-500 to-cyan-500',
   },
   {
@@ -44,15 +51,9 @@ const features = [
     description: 'Pixel-perfect on desktop, tablet, and mobile. We test on real devices, not just browser resize.',
     gradient: 'from-emerald-500 to-teal-500',
   },
-  {
-    icon: FileText,
-    title: 'Documentation Included',
-    description: 'Comprehensive README with setup, customization, deployment guides. Get running in minutes.',
-    gradient: 'from-pink-500 to-rose-500',
-  },
 ];
 
-function FeatureCard({ feature, index }: { feature: typeof features[0]; index: number }) {
+function FeatureCard({ feature, index }: { feature: typeof features[0] & { badge?: string }; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, margin: '-50px' });
   const Icon = feature.icon;
@@ -65,7 +66,16 @@ function FeatureCard({ feature, index }: { feature: typeof features[0]; index: n
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group relative"
     >
-      <div className="relative h-full p-8 glass rounded-2xl card-hover overflow-hidden">
+      <div className={`relative h-full p-8 glass rounded-2xl card-hover overflow-hidden ${feature.badge ? 'ring-2 ring-orange-500/50' : ''}`}>
+        {/* Badge */}
+        {feature.badge && (
+          <div className="absolute top-4 right-4">
+            <span className="px-2 py-1 text-xs font-bold bg-gradient-to-r from-orange-500 to-amber-500 rounded-full text-white">
+              {feature.badge}
+            </span>
+          </div>
+        )}
+        
         {/* Background Gradient */}
         <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${feature.gradient} rounded-full opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-500`} />
         

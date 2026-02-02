@@ -12,6 +12,7 @@ const pricingTiers = [
     icon: Zap,
     features: [
       'One template of your choice',
+      'Sanity CMS included',
       'Full source code',
       'Documentation',
       'Email support',
@@ -28,6 +29,7 @@ const pricingTiers = [
     icon: Crown,
     features: [
       'All 13 templates included',
+      'Sanity CMS pre-configured',
       'Full source code for everything',
       'Comprehensive documentation',
       'Priority email support',

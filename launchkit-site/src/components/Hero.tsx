@@ -8,6 +8,7 @@ import Link from 'next/link';
 
 const trustBadges = [
   { name: 'Next.js 14', icon: '⚡' },
+  { name: 'Sanity CMS', icon: '📝' },
   { name: 'Tailwind CSS', icon: '🎨' },
   { name: 'TypeScript', icon: '📘' },
   { name: 'Vercel Ready', icon: '▲' },
@@ -78,7 +79,7 @@ export default function Hero() {
             {/* Subheadline */}
             <p className="text-xl text-gray-400 mb-8 max-w-lg">
               13 production-ready Next.js templates. Multi-page. Dark mode. Responsive. 
-              Just add your content.
+              Sanity CMS included. Just add your content.
             </p>
 
             {/* CTAs */}
