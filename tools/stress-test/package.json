@@ -1,0 +1,23 @@
+{
+  "name": "@template-pipeline/stress-test",
+  "version": "1.0.0",
+  "description": "Sanity stress test tool for template QA",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "test": "ts-node src/index.ts --template=../../templates/realestate-starter"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "glob": "^10.3.10",
+    "puppeteer": "^24.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
